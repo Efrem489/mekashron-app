@@ -1,0 +1,14 @@
+echo "bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.cache
+appsettings.Development.json
+*.db
+*.log
+__pycache__/
+node_modules/
+publish/
+Dockerfile" > .gitignore

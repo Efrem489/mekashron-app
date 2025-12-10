@@ -1,0 +1,627 @@
+﻿@* @{
+    ViewData["Title"] = "ICU-Tech Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="ICU-Tech Login Page">
+    <title>@ViewData["Title"]</title>
+
+    <!-- Inline critical CSS for performance -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 2.5rem;
+            max-width: 450px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .login-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(to right, #667eea, #764ba2);
+            }
+
+        .logo {
+            font-weight: 800;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #374151;
+            background-color: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: #667eea;
+                background-color: white;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
+
+        .btn-primary {
+            display: block;
+            width: 100%;
+            padding: 0.875rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: white;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 1.5rem;
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);
+            }
+
+            .btn-primary:active {
+                transform: translateY(0);
+            }
+
+        .alert {
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            border: none;
+            font-size: 0.9375rem;
+        }
+
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+
+        .alert-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        .alert-info {
+            background-color: #dbeafe;
+            color: #1e40af;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .user-data {
+            background-color: #f8fafc;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+            .user-data strong {
+                color: #111827;
+            }
+
+        .test-account {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #f3f4f6;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+            .test-account strong {
+                color: #374151;
+                display: block;
+                margin-top: 0.25rem;
+            }
+
+        
+
+        /* Performance optimizations */
+        .login-card, .btn-primary, .alert {
+            will-change: transform, opacity;
+            transform: translateZ(0);
+        }
+    </style>
+
+    <!-- Defer non-critical CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <h1 class="logo">ICU-Tech</h1>
+            <h2 class="text-center mb-4" style="color: #1f2937; font-size: 1.5rem; font-weight: 600;">Sign In</h2>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <strong>Error:</strong> @ViewBag.Error
+                </div>
+            }
+
+            @if (ViewBag.Success != null)
+            {
+                <div class="alert alert-success" role="alert">
+                    <strong>Success!</strong> @ViewBag.Success
+                </div>
+            }
+
+            <form method="post" asp-action="Login" id="loginForm">
+                <div class="mb-4">
+                    <label class="form-label" for="username">Username or Email</label>
+                    <input type="text"
+                           class="form-control"
+                           id="username"
+                           name="username"
+                           required
+                           autocomplete="username"
+                           placeholder="Enter your username or email">
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password"
+                           class="form-control"
+                           id="password"
+                           name="password"
+                           required
+                           autocomplete="current-password"
+                           placeholder="Enter your password">
+                </div>
+
+                <button type="submit" class="btn-primary" id="submitBtn">
+                    Sign In
+                </button>
+            </form>
+
+            @if (ViewBag.Success != null && ViewBag.UserData != null)
+            {
+                <div class="user-data">
+                    @Html.Raw(ViewBag.UserData)
+                </div>
+            }
+
+            <div class="test-account">
+                <div>For testing purposes:</div>
+                <strong>efremeinikov90@gmail.com</strong>
+                <strong>фыва</strong>
+                <div class="mt-2" style="font-size: 0.75rem; color: #9ca3af;">
+                    Use the RegisterNewCustomer function to create a new account
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deferred JavaScript -->
+    <script>
+        // Add form validation and feedback
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const submitBtn = document.getElementById('submitBtn');
+
+            form.addEventListener('submit', function(e) {
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Signing in...';
+
+                // Simple client-side validation
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value.trim();
+
+                if (!username || !password) {
+                    e.preventDefault();
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Sign In';
+                    alert('Please fill in both fields');
+                }
+            });
+
+            // Add input focus effects
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'translateY(-2px)';
+                });
+
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'translateY(0)';
+                });
+            });
+        });
+
+        // Load external fonts after page load
+        if ('fonts' in document) {
+            document.fonts.load('1rem "Inter"');
+        }
+    </script>
+</body>
+</html> *@
+@{
+    ViewData["Title"] = "Mekashron Login";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Mekashron Login</title>
+    <meta name="description" content="Secure login page for Mekashron SOAP API integration">
+
+    <!-- Critical CSS inline -->
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+            background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            line-height: 1.5;
+            color: #333
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,.1);
+            position: relative;
+            overflow: hidden
+        }
+
+            .card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg,#667eea,#764ba2)
+            }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg,#667eea,#764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #374151;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: 600
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 1.25rem
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: .5rem;
+            font-weight: 600;
+            color: #4b5563
+        }
+
+        .form-control {
+            width: 100%;
+            padding: .75rem 1rem;
+            font-size: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: #f9fafb;
+            transition: all .2s ease
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: #667eea;
+                background: #fff;
+                box-shadow: 0 0 0 3px rgba(102,126,234,.1)
+            }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: .875rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all .2s ease;
+            text-align: center
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg,#667eea,#764ba2);
+            color: #fff
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(102,126,234,.3)
+            }
+
+        .btn:disabled {
+            opacity: .7;
+            cursor: not-allowed;
+            transform: none !important
+        }
+
+        /* Alert styles */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #10b981
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-color: #ef4444
+        }
+
+        /* User data display */
+        .user-data {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: .875rem;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap
+        }
+
+        /* Test info */
+        .test-info {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f3f4f6;
+            border-radius: 8px;
+            text-align: center;
+            font-size: .875rem;
+            color: #6b7280
+        }
+
+            .test-info strong {
+                display: block;
+                margin-top: .25rem;
+                color: #374151
+            }
+    </style>
+
+    <!-- Preconnect for external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Lazy load fonts -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"></noscript>
+
+    <!-- Preload essential image -->
+    <link rel="preload" as="image" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 4'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23667eea'/%3E%3Cstop offset='100%25' stop-color='%23764ba2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='4' fill='url(%23grad)'/%3E%3C/svg%3E">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1 class="logo">MEKASHRON</h1>
+            <h2>Sign In</h2>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-error" role="alert">
+                    <strong>Error:</strong> @ViewBag.Error
+                </div>
+            }
+
+            @if (ViewBag.Success != null)
+            {
+                <div class="alert alert-success" role="alert">
+                    <strong>Success!</strong> Login completed successfully.
+                </div>
+            }
+
+            <form method="post" asp-action="Login" id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="username">Email</label>
+                    <input type="text"
+                           class="form-control"
+                           id="username"
+                           name="username"
+                           required
+                           autocomplete="username"
+                           placeholder="Enter email"
+                           aria-label="Username">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password"
+                           class="form-control"
+                           id="password"
+                           name="password"
+                           required
+                           autocomplete="current-password"
+                           placeholder="Enter password"
+                           aria-label="Password">
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="submitBtn" aria-label="Sign in">
+                    Sign In
+                </button>
+            </form>
+
+            @if (ViewBag.Success != null && ViewBag.UserData != null)
+            {
+                <div class="user-data" role="region" aria-label="User information">
+                    @Html.Raw(ViewBag.UserData)
+                </div>
+            }
+
+            <div class="test-info" aria-label="Test account information">
+                <div>For testing:</div>
+                <strong>efremeinikov90@gmail.com</strong>
+                <strong>фыва</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Minimal JavaScript -->
+    <script>
+        (function() {
+            'use strict';
+
+            var form = document.getElementById('loginForm');
+            var submitBtn = document.getElementById('submitBtn');
+
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    var username = document.getElementById('username');
+                    var password = document.getElementById('password');
+
+                    // Basic validation
+                    if (!username.value.trim() || !password.value.trim()) {
+                        e.preventDefault();
+                        alert('Please fill in both fields');
+                        return;
+                    }
+
+                    // Show loading state
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = 'Signing in...';
+                    }
+
+                    // Auto-enable button after 10s (safety)
+                    setTimeout(function() {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Sign In';
+                        }
+                    }, 10000);
+                });
+            }
+
+            // Auto-hide alerts after 5 seconds
+            setTimeout(function() {
+                var alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    alert.style.opacity = '0';
+                    alert.style.transition = 'opacity 0.5s ease';
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 500);
+                });
+            }, 5000);
+
+            // Load fonts
+            if ('fonts' in document) {
+                Promise.all([
+                    document.fonts.load('1rem "Inter"'),
+                    document.fonts.load('600 1rem "Inter"')
+                ]);
+            }
+        })();
+    </script>
+</body>
+</html>
